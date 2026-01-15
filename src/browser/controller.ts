@@ -1,8 +1,9 @@
-import { chromium, firefox, webkit } from "playwright";
+import { chromium } from "playwright";
 import type { Browser, Page } from "playwright";
 import { BrowserState } from './state';
+import type { IBrowserController } from "../interfaces/IBrowser.interface";
 
-export class BrowserController {
+export class BrowserController implements IBrowserController {
     private browser?: Browser;
     private page?: Page;
     private state: BrowserState = BrowserState.INITIALIZING;
