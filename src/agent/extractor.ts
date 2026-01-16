@@ -21,6 +21,9 @@ export class PageExtractor implements IPageExtractor {
         try {
             const id = this.generateRandomId();
             const path = `./store/images/${id}.png`
+
+            await this.page.waitForLoadState('networkidle');
+            await this.page.waitForTimeout(2000);
             await this.page.screenshot({ path });
             return path;
         } catch (error) {

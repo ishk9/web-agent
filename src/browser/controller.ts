@@ -56,4 +56,11 @@ export class BrowserController implements IBrowserController {
         }
         this.state = BrowserState.READY;
     }
+
+    getPage(): Page {
+        if(!this.page){
+            throw new Error('Page is not initialized');
+        }
+        return this.page;
+    }
 }
