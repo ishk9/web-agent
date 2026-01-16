@@ -1,4 +1,6 @@
+import type { Page } from "playwright";
+
 export interface IPageExtractor {
-    extractWholeContent(): Promise<string>;
-    screenshot(): Promise<string>;
+    extractWholeContent(page: Page): Promise<string>;
+    screenshot(page: Page): Promise<string>;
 }

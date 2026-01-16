@@ -7,3 +7,8 @@ export interface IBrowserController {
     navigate(url: string): Promise<void>;
     getPage(): Page;
 }
+
+export interface IBrowserBuilderConfig {
+    headless: boolean;
+    proxy: string;
+}

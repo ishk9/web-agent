@@ -52,7 +52,8 @@ export class BrowserController implements IBrowserController {
             await this.page?.goto(url, { waitUntil: 'load' });
         } catch (error) {
             this.state = BrowserState.READY;
-            throw new Error(`Failed to navigate to ${url}: ${error}`);
+            const message = error instanceof Error ? error.message : String(error);
+            throw new Error(`Failed to navigate to ${url}: ${message}`);
         }
         this.state = BrowserState.READY;
     }

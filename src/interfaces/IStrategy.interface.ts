@@ -1,3 +1,3 @@
 export interface IStrategy {
-    generate(prompt: string, options?: any): Promise<string>;
+    generate(prompt: string, context?: string): Promise<string>;
 }

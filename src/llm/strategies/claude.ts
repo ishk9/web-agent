@@ -7,7 +7,7 @@ export class ClaudeStrategy implements IStrategy {
         this.client = new Anthropic({ apiKey: this.apiKey });
     };
 
-    async generate(prompt: string, options?: any): Promise<string> {
+    async generate(prompt: string, context?: string): Promise<string> {
         try {
             const message = await this.client.messages.create({
                 max_tokens: 1024,
@@ -21,7 +21,8 @@ export class ClaudeStrategy implements IStrategy {
                 
             return text;
         } catch (error) {
-            throw new Error(`Failed to generate response`)
+            const message = error instanceof Error ? error.message : String(error);
+            throw new Error(`Failed to generate response: ${message}`);
         }
     }
 }
