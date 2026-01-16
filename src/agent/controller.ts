@@ -6,6 +6,7 @@ import { LLMFactory } from "../llm/factory";
 import { getLLMConfig } from "../config/llm.config";
 import { getBrowserConfig } from "../config/browser.config";
 import { PageExtractor } from "./extractor";
+import { SYSTEM_PROMPT } from "../config/prompts.config";
 
 
 export class AgentController {
@@ -57,7 +58,7 @@ export class AgentController {
             if(!content) {
                 throw new Error("No content found!");
             }
-            const decision = await this.llm?.generate(content, query);
+            const decision = await this.llm?.generate(SYSTEM_PROMPT, content, query);
             console.log("Decision: ", decision);
         
         } catch(error) {

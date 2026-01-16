@@ -7,11 +7,16 @@ export class OpenAIStrategy implements IStrategy {
         this.client = new OpenAI({ apiKey: this.apiKey });
     }
 
-    async generate(prompt: string, context?: string): Promise<string> {
+    async generate(systemPrompt: string, prompt: string, context?: string): Promise<string> {
         try {
             const response = await this.client.responses.create({
                 model: this.model,
-                input: prompt
+                input: [
+                    {role: "system", content: systemPrompt},
+                    {role: "assistant", content: context || ""},
+                    {role: "user", content: prompt}
+                ],
+                reasoning: { effort: "low" },
             });
             const answer = response.output_text;
             return answer;
