@@ -49,18 +49,43 @@ export class AgentController {
 
     async run(url: string, query: string): Promise<void> {
         try {
-            await this.browser?.navigate(url);
-            const page = this.browser?.getPage();
-            if (!page) {
-                throw new Error('Page is not initialized');
+            let currentUrl = url;
+            let goalAchieved = false;
+            let maxIterations = 10;
+            let iterations = 0;
+            while(!goalAchieved && iterations < maxIterations) {
+                await this.browser?.navigate(currentUrl);
+                const page = this.browser?.getPage();
+                if (!page) {
+                    throw new Error('Page is not initialized');
+                }
+                const content = await this.extractor?.extractWholeContent(page);
+                if(!content) {
+                    throw new Error("No content found!");
+                }
+                let decision = await this.llm?.generate(SYSTEM_PROMPT, content, query);
+                if(!decision) {
+                    throw new Error("No decision found!");
+                }
+                console.log("Decision: ", decision);
+                decision = decision.toLowerCase();
+                if(decision.includes("navigate")) {
+                    const urlMatch = decision.match(/navigate\(["']?([^"')]+)["']?\)/);
+                    if (!urlMatch || !urlMatch[1]) {
+                        throw new Error("No url found in decision! Please provide a valid url.");
+                    }
+                    currentUrl = urlMatch[1].trim();
+                    // Remove any remaining quotes
+                    currentUrl = currentUrl.replace(/^["']|["']$/g, '');
+                    if(!currentUrl) {
+                        throw new Error("No url found in decision! Please provide a valid url.");
+                    }
+                    await this.browser?.navigate(currentUrl);
+                } else {
+                    goalAchieved = true;
+                }
+                iterations++;
             }
-            const content = await this.extractor?.extractWholeContent(page);
-            if(!content) {
-                throw new Error("No content found!");
-            }
-            const decision = await this.llm?.generate(SYSTEM_PROMPT, content, query);
-            console.log("Decision: ", decision);
-        
         } catch(error) {
             const message = error instanceof Error ? error.message : String(error);
             throw new Error(`Failed to run agent: ${message}`);

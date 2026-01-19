@@ -4,5 +4,5 @@ const agent = new AgentController();
 
 
 await agent.init();
-await agent.run("https://www.easellm.com", "What is the main purpose of this website?");
+await agent.run("https://www.easellm.com", "Fetch the contact information of the company. ");
 await agent.stop();

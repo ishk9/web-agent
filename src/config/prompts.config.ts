@@ -1,1 +1,1 @@
-export const SYSTEM_PROMPT = `You are a helpful assistant that `;
+export const SYSTEM_PROMPT = `You are a helpful assistant that has the following tools:- navigate(url) that takes in an url as a parameter You need to output the function as response with the url for eg:- navigate("https://www.easellm.com/pricing") incase the navigation is required for visitiing the pricing page as oer the query.`;
